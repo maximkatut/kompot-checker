@@ -1,19 +1,9 @@
 console.log("Validating JSON structure...");
 import * as vscode from "vscode";
 // top‑level keys you require
-const requiredTopLevel = [
-  "id",
-  "name",
-  "description",
-  "module",
-  "width",
-  "placement",
-  "content",
-];
+const requiredTopLevel = ["id", "name", "description", "module", "width", "placement", "content"];
 
-export function validateJsonStructure(
-  doc: vscode.TextDocument
-): vscode.Diagnostic[] {
+export function validateJsonStructure(doc: vscode.TextDocument): vscode.Diagnostic[] {
   const diagnostics: vscode.Diagnostic[] = [];
 
   // 1️⃣  Pre‑process: strip JS template blocks
@@ -31,13 +21,7 @@ export function validateJsonStructure(
 
   /** helper that puts the underline on the correct line */
   const diag = (msg: string, line = 0) =>
-    diagnostics.push(
-      new vscode.Diagnostic(
-        new vscode.Range(line, 0, line, 1),
-        msg,
-        vscode.DiagnosticSeverity.Error
-      )
-    );
+    diagnostics.push(new vscode.Diagnostic(new vscode.Range(line, 0, line, 1), msg, vscode.DiagnosticSeverity.Error));
 
   // 2️⃣  Top‑level keys
   for (const key of requiredTopLevel) {
@@ -46,7 +30,7 @@ export function validateJsonStructure(
     }
   }
 
-  // 3️⃣  Nested checks
+  // 3️⃣  Nested checks 
   if (!Array.isArray(data.content)) {
     diag('"content" should be an array');
   } else {
