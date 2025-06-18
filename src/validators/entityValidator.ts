@@ -5,6 +5,16 @@ import { getRangeFromZodPath } from "../utils/getRange";
 const collection = vscode.languages.createDiagnosticCollection("kompotEntity");
 
 export function validateEntityDoc(doc: vscode.TextDocument) {
+  // Only validate JSON files
+  if (doc.languageId !== "json") {
+    return;
+  }
+
+  // Only validate files inside `_entity` folder
+  if (!doc.uri.fsPath.includes("/_entity/")) {
+    return;
+  }
+
   const jsonText = doc.getText();
 
   let jsonData: any;
