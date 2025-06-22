@@ -8,17 +8,27 @@ export function getRangeFromZodPath(doc: vscode.TextDocument, path: (string | nu
     return new vscode.Range(0, 0, 0, 1);
   }
 
-  let node = jsonc.findNodeAtLocation(root, path);
-  if (!node && path.length > 1) {
-    // Try parent object if value is missing
-    node = jsonc.findNodeAtLocation(root, path.slice(0, -1));
+  let currentNode = root;
+  let lastValidNode = root;
+
+  for (let i = 0; i < path.length; i++) {
+    const segment = path[i];
+    const nextNode = jsonc.findNodeAtLocation(currentNode, [segment]);
+
+    if (!nextNode) {
+      // Try parent object instead
+      const fallbackNode = jsonc.findNodeAtLocation(root, path.slice(0, i));
+      if (fallbackNode) {
+        lastValidNode = fallbackNode;
+      }
+      break;
+    }
+
+    lastValidNode = nextNode;
+    currentNode = nextNode;
   }
 
-  if (!node) {
-    return new vscode.Range(0, 0, 0, 1);
-  }
-
-  const start = doc.positionAt(node.offset);
-  const end = doc.positionAt(node.offset + node.length);
+  const start = doc.positionAt(lastValidNode.offset);
+  const end = doc.positionAt(lastValidNode.offset + lastValidNode.length);
   return new vscode.Range(start, end);
 }
