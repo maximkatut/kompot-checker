@@ -118,11 +118,33 @@ export function activate(context: vscode.ExtensionContext) {
 
     // ✅ Close the untitled doc without saving
     await vscode.commands.executeCommand("workbench.action.revertAndCloseActiveEditor");
-    vscode.window.showInformationMessage("✅ Embedded JS saved and editor closed.");
+    vscode.window.showInformationMessage("✅ JS saved.");
+  });
+
+  const insertJsTemplate = vscode.commands.registerCommand("kompotChecker.insertJsTemplate", async () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
+    editor
+      .edit((editBuilder) => {
+        const position = editor.selection.active;
+        editBuilder.insert(position, `"{js{}js}"`);
+      })
+      .then(() => {
+        // Move cursor between the inner braces
+        const position = editor.selection.active;
+        const newPosition = position.translate(0, -5); // inside `{js|js}`
+        editor.selection = new vscode.Selection(newPosition, newPosition);
+      });
+
+    vscode.window.showInformationMessage("Template was insterted.");
   });
 
   context.subscriptions.push(editJsCmd);
   context.subscriptions.push(saveAndCloseCmd);
+  context.subscriptions.push(insertJsTemplate);
 }
 
 export function deactivate() {}

@@ -30,6 +30,14 @@
         "linux": "ctrl+shift+e",
         "win": "ctrl+shift+e",
         "mac": "cmd+shift+e"
+      },
+      {
+        "command": "kompotChecker.insertJsTemplate",
+        "key": "ctrl+shift+v",
+        "when": "editorLangId == json",
+        "linux": "ctrl+shift+v",
+        "win": "ctrl+shift+v",
+        "mac": "cmd+shift+v"
       }
     ],
     "languages": [
