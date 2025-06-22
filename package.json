@@ -59,6 +59,10 @@
       {
         "command": "kompotChecker.saveEmbeddedJsAndClose",
         "title": "Save Embedded JS and Close"
+      },
+      {
+        "command": "kompotChecker.insertJsTemplate",
+        "title": "Insert JS Template"
       }
     ]
   },
